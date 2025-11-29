@@ -20,32 +20,20 @@ public class MonthlyRecord {
         this.balance = carryOverBalance;
     }
 
-    //short helprer methods getter and setters
-    public int getMonth() {
-        return month;
-    }
-    public int getYear() { 
-        return year; 
-    }
-    public boolean isClosed() { 
-        return closed; 
-    }
-
-    public ArrayList<Transaction> getTransactions() { 
-        return transactions; 
-    }
-
-    public void setBalance(double balance) { 
-        this.balance = balance;
-    }
+    // getters
+    public int getMonth() { return month; }
+    public int getYear() { return year; }
+    public boolean isClosed() { return closed; }
+    public ArrayList<Transaction> getTransactions() { return transactions; }
+    public double getBalance() { return balance; }
+    public void setBalance(double balance) { this.balance = balance; }
 
     // Close month
-    public void closeMonth() { 
+    public void closeMonth() {
         closed = true;
     }
 
-
-    // Add income safely
+    // Add income
     public void addIncomeAmount(double amount) {
         if (amount <= 0) {
             System.out.println("Income must be greater than 0");
@@ -59,7 +47,7 @@ public class MonthlyRecord {
         }
     }
 
-    // Add expense safely
+    // Add expense
     public void addExpenseAmount(double amount) {
         if (amount <= 0) {
             System.out.println("Expense must be greater than 0");
@@ -77,7 +65,7 @@ public class MonthlyRecord {
         }
     }
 
-    // Save transaction for monthly history
+    // Add transaction to list
     public void addTransaction(Transaction t) {
         if (t == null) {
             System.out.println("Cannot add null transaction");
@@ -88,10 +76,6 @@ public class MonthlyRecord {
         } catch (Exception e) {
             System.out.println("Error adding transaction: " + e.getMessage());
         }
-    }
-
-    public double getBalance() { 
-        return balance; 
     }
 
     // Print history
@@ -112,29 +96,31 @@ public class MonthlyRecord {
         }
     }
 
-    // Save this month to file
+    // Save month to file
     public void saveToFile(String filename) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filename, true))) {
-            // Month header
+
             bw.write("Month:" + month + ",Year:" + year + ",Balance:" + balance + ",Closed:" + closed);
             bw.newLine();
-            // Transactions
+
             for (Transaction t : transactions) {
                 bw.write(t.getType() + "," + t.getAmount() + "," + t.getDescription());
                 bw.newLine();
             }
-            bw.write("END"); // end of month
+
+            bw.write("END");
             bw.newLine();
+
         } catch (IOException e) {
             System.out.println("Error saving month: " + e.getMessage());
         }
     }
 
-    // Load month from file lines
+    // Load from file lines
     public static MonthlyRecord loadFromLines(String[] lines) {
         MonthlyRecord monthRecord = null;
         try {
-            if (lines.length < 1) 
+            if (lines.length < 1)
                 return null;
 
             String[] header = lines[0].split(",");
@@ -150,9 +136,10 @@ public class MonthlyRecord {
             for (int i = 1; i < lines.length; i++) {
                 if (lines[i].equals("END"))
                     break;
-                
+
                 String[] tParts = lines[i].split(",", 3);
-                if (tParts.length < 3) continue; // skip invalid lines
+                if (tParts.length < 3) continue;
+
                 String type = tParts[0];
                 double amount = Double.parseDouble(tParts[1]);
                 String desc = tParts[2];

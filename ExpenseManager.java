@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class ExpenseManager {
 
-    private ArrayList<MonthlyRecord> months = new ArrayList<>();
+    ArrayList<MonthlyRecord> months = new ArrayList<>();
     private double lastBalance = 0; // carry-over from previous month
     private static final String FILE_NAME = "expense_data.txt";
 
